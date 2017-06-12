@@ -258,7 +258,7 @@ This configuration supports the following builtin variables:
  - `#{username_ssh}`: SSH aware username information, blank when no SSH
    connection detected
 
-### Accessing the Mac OSX clipboard from within tmux sessions
+### Accessing the macOS clipboard from within tmux sessions
 
 [Chris Johnsen created the `reattach-to-user-namespace`
 utility][reattach-to-user-namespace] that makes `pbcopy` and `pbpaste` work
