@@ -1,3 +1,4 @@
+# cat << EOF > /dev/null
 # https://github.com/gpakosz/.tmux
 # (‑●‑●)> released under the WTFPL v2 license, by Gregory Pakosz (@gpakosz)
 
@@ -219,10 +220,10 @@ tmux_conf_battery_vbar_palette='gradient'
 #tmux_conf_battery_vbar_palette='#d70000,#ff5f00,#5fff00'  # red, orange, green
 
 # symbols used to indicate whether battery is charging or discharging
-tmux_conf_battery_status_charging='↑'       # U+2191
-tmux_conf_battery_status_discharging='↓'    # U+2193
-#tmux_conf_battery_status_charging='⚡'     # U+26A1
-#tmux_conf_battery_status_discharging='🔋'  # U+1F50B
+#tmux_conf_battery_status_charging='↑'       # U+2191
+#tmux_conf_battery_status_discharging='↓'    # U+2193
+tmux_conf_battery_status_charging='⚡'     # U+26A1
+tmux_conf_battery_status_discharging='🔋'  # U+1F50B
 
 # clock style
 tmux_conf_theme_clock_colour='#00afff'  # light blue
@@ -257,3 +258,77 @@ tmux_conf_copy_to_os_clipboard=false
 
 # move status line to top
 #set -g status-position top
+
+
+
+
+
+################### 自定义配置
+
+# 修改 Ctrl+L 这样修改不会清除历史记录，但是体验不太好，有延迟
+#bind -n C-l send-keys "clear" \; send-keys "Enter"
+
+# 修改 prefix 为 ctrl+o
+set -g prefix2 C-o
+set -g prefix C-o
+bind C-o send-prefix
+
+# 状态栏设置在顶部
+set -g status-position top
+
+# 开关批量命令
+bind v run "cut -c3- ~/.tmux.conf.local | sh -s _toggle_sync"
+
+# 打开多个 panel
+bind a run "cut -c3- ~/.tmux.conf.local | sh -s _open_panel"
+bind A run "cut -c3- ~/.tmux.conf.local | sh -s _open_panel_with_htop"
+
+# 打开系统剪切板
+tmux_conf_copy_to_os_clipboard=true
+
+# 开启 vi 快捷键
+set -g mode-keys vi
+
+# Ctrl+i 快速进入 copy 模式
+bind -n C-Y copy-mode
+
+# List of plugins
+set -g @plugin 'tmux-plugins/tpm'
+
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+# tmux-resurrect
+set -g @resurrect-save-bash-history 'on'
+set -g @resurrect-capture-pane-contents 'on'
+set -g @resurrect-strategy-vim 'session'
+
+# EOF
+#
+# # exit the script if any statement returns a non-true return value
+#
+# # 新增 panel
+# _open_panel() {
+#   tmux split-window -h                # 开启一个竖屏
+#   tmux split-window -v                # 开启一个横屏
+#   tmux selectp -L                     # 回到第一个屏幕
+# }
+#
+# # 新增 panel
+# _open_panel_with_htop() {
+#   tmux split-window -h                # 开启一个竖屏
+#   tmux split-window -v "htop"         # 开启一个横屏,并执行top命令
+#   tmux selectp -L                     # 回到第一个屏幕
+# }
+#
+# # 开关批量命令模式
+# _toggle_sync() {
+#   if [[ `tmux show-options -w | grep 'synchronize-panes.*on'`  ]]; then
+#     toggle=off
+#   else
+#     toggle=on
+#   fi
+#   tmux display-message "sync panes tmux: $toggle"
+#   tmux set-option -w synchronize-panes $toggle &> /dev/null
+# }
+#
+## "$@"
